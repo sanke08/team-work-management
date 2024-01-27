@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @unique @default(cuid())
+  name          String
+  email         String         @unique
+  password      String
+  emailVerified DateTime?
+  image         String?
+  organization  Organization[]
+  Member        Member[]
+}
+
+model Member {
+  id             String       @id @unique @default(cuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           Role         @default(MEMBER)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organizationId String
+  Organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model Organization {
+  id        String     @id @unique @default(cuid())
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  creatorId String
+  trash     Boolean    @default(false)
+  link      String     @default("")
+  creator   User       @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  boards    Board[]
+  OrgLimit  OrgLimit?
+  Member    Member[]
+  AuditLog  AuditLog[]
+  List      List[]
+}
+
+model Board {
+  id             String       @id @unique @default(cuid())
+  organizationId String
+  title          String
+  imageId        String?
+  imageThumbUrl  String?      @db.Text
+  imageFullUrl   String?      @db.Text
+  imageUserName  String?      @db.Text
+  imageLinkHTML  String?      @db.Text
+  trash          Boolean      @default(false)
+  lists          List[]
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model List {
+  id             String       @id @unique @default(cuid())
+  title          String
+  order          Int
+  boardId        String
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  trash          Boolean      @default(false)
+  board          Board        @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  listId         String?
+  cards          Card[]
+}
+
+model Card {
+  id          String  @id @unique @default(cuid())
+  title       String
+  order       Int
+  trash       Boolean @default(false)
+  description String?
+  listId      String
+  list        List    @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ACTION {
+  CREATE
+  UPDATE
+  DELETE
+  JOINED
+  REMOVE
+  ROLE_CHANGED
+  TRASHED
+  RESTORED
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum ENTITY_TYPE {
+  BOARD
+  LIST
+  CARD
+  MEMBER
+}
+
+model AuditLog {
+  id          String       @id @default(uuid())
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  boardId     String       @default("")
+  listId      String       @default("")
+  action      ACTION
+  entityId    String
+  entityType  ENTITY_TYPE
+  entityTitle String
+  userId      String
+  userImage   String       @db.Text
+  userName    String       @db.Text
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model OrgLimit {
+  id             String       @id @default(uuid())
+  organizationId String       @unique
+  count          Int          @default(0)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
