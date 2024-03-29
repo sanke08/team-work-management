@@ -49,7 +49,7 @@ const NavItem = ({ organization, user }: Props) => {
     ];
     return (
         <AccordionItem value={organization.id}>
-            <AccordionTrigger onClick={() => setToggle((pre) => !pre)} className={twMerge('  border-[0.1rem] border-neutral-600/30 mt-1 hover:no-underline p-2 rounded-lg', params.orgId === organization.id && "bg-sky-500/20", toggle && params.orgId === organization.id && " bg-slate-100")}>
+            <AccordionTrigger onClick={() => setToggle((pre) => !pre)} className={twMerge('  border-[0.1rem] border-neutral-600/30 mt-1 hover:no-underline p-2 rounded-lg', params?.orgId === organization.id && "bg-sky-500/20", toggle && params?.orgId === organization.id && " bg-slate-100")}>
                 <div className="flex items-center justify-between gap-x-2 w-full">
                     <div className=' w-full flex gap-2 items-center'>
                         <div className="w-7 h-7 relative">
@@ -67,7 +67,7 @@ const NavItem = ({ organization, user }: Props) => {
             <AccordionContent className=''>
                 {
                     routes.map((route) => (
-                        <Button disabled={route.label === "Settings" && disabled} key={route.label} size="sm" variant="ghost" onClick={() => { router.push(route.href); dispatch({ type: CLOSE_MOBILE_TOGGLE }) }} className={twMerge("w-full font-normal justify-start pl-10 hover:bg-sky-500/10", (pathname === route.href || params.boardId && route.label === "Boards") && "bg-sky-500/10 text-sky-700 my-[2px]")}>
+                        <Button disabled={route.label === "Settings" && disabled} key={route.label} size="sm" variant="ghost" onClick={() => { router.push(route.href); dispatch({ type: CLOSE_MOBILE_TOGGLE }) }} className={twMerge("w-full font-normal justify-start pl-10 hover:bg-sky-500/10", (pathname === route.href || params?.boardId && route.label === "Boards") && "bg-sky-500/10 text-sky-700 my-[2px]")}>
                             {route.icon}
                             {route.label}
                         </Button>

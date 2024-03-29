@@ -45,10 +45,9 @@ export default layout
 
 const Skeleton = () => {
     return (
-        <div className=' w-[250px] bg-slate-200'>
+        <div className=' w-[250px] bg-slate-200 h-screen'>
             {
-                [...Array(5)].map((i, j) => (
-
+                [...Array(10)].map((i, j) => (
                     <div key={j} className=' w-full flex justify-between items-center h-12 px-2 border border-neutral-500/20 rounded-lg overflow-hidden mt-1'>
                         <div className=' bg-sky-500/30 animate-pulse w-2/3 h-8 rounded-lg' />
                         <ChevronDown className=' h-4 w-4' />

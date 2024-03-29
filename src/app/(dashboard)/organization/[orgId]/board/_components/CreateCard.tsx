@@ -1,43 +1,34 @@
 "use client"
-import { createCard } from '@/action/card.action'
 import ErrorField from '@/components/ErrorField'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Plus, X } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, } from 'next/navigation'
 import React, { useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { useOnClickOutside } from 'usehooks-ts'
-
+import axios from "axios"
+import { useOldAction } from '@/components/hooks/useOldAction'
 const CreateCard = ({ listId }: { listId: string }) => {
-    const router = useRouter()
     const ref = useRef(null)
-    const params: { orgId: string, boardId: string } = useParams()
+    const params: { orgId: string, boardId: string } | null = useParams()
     const [toggle, setToggle] = useState<boolean>(false)
     const [title, setTitle] = useState<string>("")
-    const [loading, setLoading] = useState<boolean>(false)
-    const [error, setError] = useState<string>("")
 
-    const handleCreateCard = async () => {
-        setLoading(true)
-        const { success, message } = await createCard({ title, listId, orgId: params.orgId, boardId: params.boardId })
+    const { loading, error, execute, reset } = useOldAction({
+        FN: async () => {
+            return await axios.post(`/api/socket/card?listId=${listId}&orgId=${params?.orgId}&boardId=${params?.boardId}`, { title })
+        },
+        onSuccess: () => {
+            handleClose()
+        }
+    })
 
-        if (success) {
-            setLoading(false)
-            setError("")
-            setToggle(false)
-            router.refresh()
-            return
-        }
-        if (!success) {
-            setError(message)
-            setLoading(false)
-        }
-    }
+
     const handleClose = () => {
         setToggle(false)
         setTitle("")
-        setError("")
+        reset()
     }
     useOnClickOutside(ref, handleClose)
     return (
@@ -50,7 +41,7 @@ const CreateCard = ({ listId }: { listId: string }) => {
                 <Textarea value={title} onChange={(e) => setTitle(e.target.value)} className=' resize-none hidescrollbar' />
                 <ErrorField errorStr={error} />
                 <div className=' flex items-center space-x-2'>
-                    <Button isLoading={loading} disabled={title.length === 0} onClick={handleCreateCard} variant={"primary"}>Add Card</Button>
+                    <Button isLoading={loading} disabled={title.length === 0} onClick={() => execute()} variant={"primary"}>Add Card</Button>
                     <Button disabled={loading} onClick={handleClose} variant={"ghost"} className=' w-fit h-fit '><X /> </Button>
                 </div>
             </div>

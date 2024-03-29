@@ -11,6 +11,7 @@ export type createBoardRequest = z.infer<typeof createBoardValidator>
 export const updateBoardValidator = z.object({
     id: z.string({ required_error: "id Not Found" }),
     title: z.string({ required_error: "Title Required" }).min(3, "Title must  contain at least 3 character(s)").max(15, "Title contain maximum 3 character(s)"),
+    imgurl:z.string().optional()
 
 })
 export type updateBoardRequest = z.infer<typeof updateBoardValidator>

@@ -15,7 +15,7 @@ interface Props {
 
 
 const OrgnizationSwitcher = ({ members, user }: Props) => {
-    const params: { orgId: string } = useParams()
+    const params: { orgId: string }|null = useParams()
     const dispatch = useDispatch()
     const router = useRouter()
 
@@ -26,22 +26,22 @@ const OrgnizationSwitcher = ({ members, user }: Props) => {
                 <DropdownMenuTrigger className=' w-60'>
                     <Button variant={"ghost"} className=' w-full flex justify-between bg-slate-200 hover:bg-slate-300'>
                         <div className=' flex w-full gap-2'>
-                            {members.find(({ Organization }) => Organization.id === params.orgId)?.Organization.creatorId === user.id && <ShieldCheck className=' h-5 w-5 text-green-500' />}
-                            {members.find(({ Organization }) => Organization.id === params.orgId)?.Organization.name}
+                            {members.find(({ Organization }) => Organization.id === params?.orgId)?.Organization.creatorId === user.id && <ShieldCheck className=' h-5 w-5 text-green-500' />}
+                            {members.find(({ Organization }) => Organization.id === params?.orgId)?.Organization.name}
                         </div>
                         <ChevronsUpDown className=' h-5 w-5' />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className=' w-56 p-0'>
                     {
-                        members.filter(({ Organization }) => (Organization.id !== params.orgId)).map(({ Organization }) => (
+                        members.filter(({ Organization }) => (Organization.id !== params?.orgId)).map(({ Organization }) => (
                             <DropdownMenuItem key={Organization.id}>
                                 <Button onClick={() => router.push(`/organization/${Organization.id}`)} className=' w-full flex gap-2 justify-start'>
                                     <div className=' flex gap-x-2 w-full'>
                                         <Folder />
                                         {Organization.name}
                                     </div>
-                                    {members.find(({ Organization }) => Organization.id === params.orgId)?.Organization.creatorId === user.id && <ShieldCheck className=' h-5 w-5 text-green-500' />}
+                                    {members.find(({ Organization }) => Organization.id === params?.orgId)?.Organization.creatorId === user.id && <ShieldCheck className=' h-5 w-5 text-green-500' />}
                                 </Button>
 
                             </DropdownMenuItem>

@@ -5,6 +5,7 @@ import Members from './_components/Members'
 import Toggle from './_components/Toggle'
 import { getUser } from '@/action/user.action'
 import { redirect } from 'next/navigation'
+import { Loader2 } from 'lucide-react'
 
 interface Props {
   params: {
@@ -56,7 +57,7 @@ const page = async ({ params, searchParams }: Props) => {
 
 
   return (
-    <Suspense fallback={<p className=' p-5 bg-red-400 w-full h-40'>Loadin</p>} >
+    <Suspense fallback={<p className=' w-full h-screen'><Loader2 className=' w-10 h-10 animate-spin'/> </p>} >
       <div className=' w-full'>
         <div className=' lg:flex w-full justify-center sm:px-10'>
           <div className='lg:w-[50%] mt-2'>

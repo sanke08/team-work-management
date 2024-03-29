@@ -53,9 +53,12 @@ const page = async ({ params, searchParams }: Props) => {
     return (
         <Suspense fallback={<Skeleton />}>
             {/* <Navbar /> */}
+            {
+                !lists.length && <p className=' capitalize flex justify-center w-full text-3xl text-neutral-500 mt-20'>No file in trash</p>
+            }
             <div className=' p-5 pt-2 grid grid-cols-2 gap-5'>
                 {
-                    lists && lists.map((list) => {                        
+                    lists && lists.map((list) => {
                         return (
                             <div key={list.id} className=' border px-5 p-2 rounded-lg flex justify-between items-center'>
                                 <div>

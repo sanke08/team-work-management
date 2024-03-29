@@ -32,7 +32,7 @@ const RestoreButton = ({ list, board, member, orgId }: Props) => {
     })
     return (
         <div className=' flex '>
-            <CustomDialogTrigger height=' h-max' width='w-[30em]' header={`delete ${list ? "List" : "Board"}`} content={list ? <FieldDelete list={list} orgId={orgId} member={member} /> : <FieldDelete board={board} orgId={orgId} member={member} />}>
+            <CustomDialogTrigger header={`delete ${list ? "List" : "Board"}`} className=' min-h-[200px] xl:w-[35em]' content={list ? <FieldDelete list={list} orgId={orgId} member={member} /> : <FieldDelete board={board} orgId={orgId} member={member} />}>
                 <Button variant={"outline"} className=' text-red-500'> <Trash2 className=' w-5 h-5' /> Delete</Button>
             </CustomDialogTrigger>
             <Button onClick={() => restore()} variant={"ghost"} isLoading={loadingRestore} className=''> <RefreshCcw className=' w-5 h-5' /> Restore </Button>
@@ -62,16 +62,16 @@ const FieldDelete = ({ list, board, member, orgId }: { list?: List, board?: Boar
         }
     })
     return (
-        <div>
+        <div className=' w-full'>
             <p className=' text-3xl'>{list && list.title} {board && board.title} </p>
             <p className=' text-[0.6em] text-neutral-500'>{list && new Date(list.createdAt).toLocaleDateString()}{board && new Date(board.createdAt).toLocaleDateString()} </p>
-            <div className=' mt-5 w-full text-center'>
+            <div className=' mt-5 w-full text-center '>
                 <p>The List will be Deleted Permenant</p>
                 <div className=' flex gap-x-20 w-max mx-auto mt-5'>
-                    <DialogClose>
-                        <Button variant={"outline"} disabled={loading}>Cancle</Button>
+                    <DialogClose className=' w-[10em]'>
+                        <Button variant={"outline"} disabled={loading} className=' w-full'>Cancle</Button>
                     </DialogClose>
-                    <Button onClick={() => execute()} isLoading={loading} >Delete</Button>
+                    <Button onClick={() => execute()} isLoading={loading} className=' w-[10em]'>Delete</Button>
                 </div>
             </div>
         </div>

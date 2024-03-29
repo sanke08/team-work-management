@@ -1,15 +1,15 @@
 "use client"
 import { useCallback, useEffect, useState } from "react"
 
-export const useAction = ({ FN, onSuccess }: { FN: () => Promise<any>, onSuccess?: () => void }) => {
+export const useAction = ({ FN, onSuccess }: { FN: (val?:any) => Promise<any>, onSuccess?: () => void }) => {
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState("")
     const [success, setSuccess] = useState(false)
-    const execute = async () => {
+    const execute = async (val?: string) => {
         setLoading(true)
         setSuccess(false)
         setError("")
-        const { success, message } = await FN()
+        const { success, message } = await FN(val)
         if (success) {
             setSuccess(true)
             onSuccess ? onSuccess() : null

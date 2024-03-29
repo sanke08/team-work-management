@@ -7,9 +7,9 @@ const Navbar = () => {
     const router = useRouter()
     const pathname = usePathname()
     const searchPrams = useSearchParams()
-    const [search, setSearch] = useState(searchPrams.get("search") || "")
+    const [search, setSearch] = useState(searchPrams?.get("search") || "")
     useEffect(() => {
-        if (!search) return router.push(pathname)
+        if (!search && pathname) return router.push(pathname)
         const imr = setTimeout(() => {
             router.push(pathname + "/?search=" + search)
         }, 500);

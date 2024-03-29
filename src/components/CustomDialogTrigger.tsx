@@ -17,8 +17,8 @@ interface Props {
 const CustomDialogTrigger = ({ header, content, children, description, className, height, width }: Props) => {
     return (
         <Dialog >
-            <DialogTrigger className={twMerge(" w-full rounded-lg ", className)}>{children} </DialogTrigger>
-            <DialogContent className={twMerge(' min-h-[350px] overflow-scroll block w-[50%] hidescrollbar rounded-lg', height, width)}>
+            <DialogTrigger className={twMerge(" w-full rounded-lg")}>{children} </DialogTrigger>
+            <DialogContent className={twMerge(' min-h-[350px] overflow-scroll block w-[50%] hidescrollbar rounded-lg', className)}>
                 <DialogHeader>
                     <DialogTitle>{header}</DialogTitle>
                     <DialogDescription>{description}</DialogDescription>

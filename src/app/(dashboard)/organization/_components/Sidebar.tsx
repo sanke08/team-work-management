@@ -19,7 +19,7 @@ interface Props {
 
 const Sidebar = ({ members, user }: Props) => {
 
-    const params: { orgId: string } = useParams()
+    const params: { orgId: string }|null = useParams()
     if (!members) {
         return
     }
@@ -30,7 +30,7 @@ const Sidebar = ({ members, user }: Props) => {
         return orgs.push(member.Organization)
     })
 
-    const currOrg = orgs.find((org) => org.id === params.orgId)
+    const currOrg = orgs.find((org) => org.id === params?.orgId)
 
 
     return (
@@ -49,7 +49,7 @@ const Sidebar = ({ members, user }: Props) => {
                 {
                     // @ts-ignore
                     members[0].Organization.creatorId == members[0].userId &&
-                    <CustomDialogTrigger header='Leave Organization' height=' md:h-[20em] min-h-[18em]' width='lg:w-[40%] w-[90%]' content={<LeaveOrg currOrg={currOrg} member={members[0]} />}>
+                    <CustomDialogTrigger header='Leave Organization' className='lg:w-[40%] w-[90%]  md:h-[20em] min-h-[18em]' content={<LeaveOrg currOrg={currOrg} member={members[0]} />}>
                         <Button variant={"outline"} className=' flex gap-2 w-full h-fit p-1.5'>
                             Leave Organization
                             <LogOut />

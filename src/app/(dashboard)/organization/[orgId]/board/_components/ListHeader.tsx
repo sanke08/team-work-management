@@ -1,15 +1,16 @@
 "use client"
-import { updateList } from '@/action/list.action'
 import ErrorField from '@/components/ErrorField'
+import { useOldAction } from '@/components/hooks/useOldAction'
 import { Input } from '@/components/ui/input'
 import { List } from '@prisma/client'
+
 import { X } from 'lucide-react'
 import React, { useRef, useState } from 'react'
 import { useEventListener, useOnClickOutside } from "usehooks-ts"
 import ListOption from './ListOption'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useParams,  } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
-import { useAction } from '@/components/hooks/useAction'
+import axios from 'axios'
 
 
 
@@ -19,28 +20,26 @@ interface Props {
 
 
 const ListHeader = ({ list }: Props) => {
-    const router = useRouter()
-    const pathname = usePathname()
-    const params: { orgId: string, boardId: string } = useParams()
+    const params: { orgId: string, boardId: string } | null = useParams()
     const ref = useRef(null)
     const [isediting, setIsediting] = useState<boolean>(false)
     const [title, setTitle] = useState(list.title || "")
 
 
-    const { loading, error, execute } = useAction({
+    const { loading, error, execute } = useOldAction({
         FN: async () => {
-            return updateList({ title, listId: list.id, path: pathname, orgId: params.orgId, boardId: params.boardId })
+            return await axios.put(`/api/socket/list/${list.id}?boardId=${params?.boardId}&orgId=${params?.orgId}`, { title })
         },
         onSuccess: () => {
             setIsediting(false)
-            router.refresh()
         }
     })
+
+
 
     useEventListener("keydown", async (e: KeyboardEvent) => {
         if (e.key === "Enter") {
             await execute()
-            router.refresh()
         }
     })
     useOnClickOutside(ref, () => setIsediting(false));

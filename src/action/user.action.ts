@@ -23,7 +23,7 @@ export const LoginAction = async ({ ...payload }) => {
         if (!matchPassword) return { message: "Invalid Credentials", success: false }
         const token = jwt.sign({ id: existUser.id }, process.env.SECRETE_TOKEN!)
         const cookieStore = cookies()
-        await cookieStore.set("trello_auth_token", token, { expires: new Date(Date.now() + 24 * 60 * 60 * 1000) })
+        await cookieStore.set("trello_auth_token", token, { expires: new Date(Date.now() +5* 24 * 60 * 60 * 1000) })
         return { success: true, message: "Login successful" }
     } catch (error: any) {
         if (error instanceof z.ZodError) {
@@ -65,7 +65,7 @@ export const RegisterAction = async ({ ...payload }) => {
         })
         const token = await jwt.sign({ id: user.id }, process.env.SECRETE_TOKEN!)
         const cookieStore = cookies()
-        cookieStore.set("trello_auth_token", token)
+        cookieStore.set("trello_auth_token", token,{ expires: new Date(Date.now() +5* 24 * 60 * 60 * 1000) })
         return { success: true, message: "Login successful" }
     } catch (error) {
         if (error instanceof z.ZodError) {

@@ -38,14 +38,15 @@ const layout = async ({ children, params }: Props) => {
             </div>
         )
     }
+    
     return (
         <Suspense fallback={<Skeleton />}>
             <div className='h-full w-full'>
-                <div className=' fixed -z-10 md:w-[calc(100vw-250px)] w-full overflow-hidden hidescrollbar'>
-                    <Image src={img} alt='' className=' h-[calc(100vh-3.5rem)] w-full object-cover rounded-lg ' />
+                <div className=' fixed -z-10 md:w-[calc(100vw-250px)] w-full h-full flex justify-center overflow-hidden hidescrollbar'>
+                    <Image src={board.imageFullUrl} alt='' fill className='  w-full object-cover rounded-lg' />
                 </div>
                 <Navbar board={board} member={member} orgId={params.orgId} />
-                <div className='w-full overflow-x-scroll min-h-[calc(100vh-6.5rem)]'>
+                <div className='w-full overflow-x-scroll min-h-[calc(100vh-6.5rem)] hidescrollbar'>
                     {children}
                 </div>
             </div>

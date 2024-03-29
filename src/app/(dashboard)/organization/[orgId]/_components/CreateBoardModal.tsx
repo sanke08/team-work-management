@@ -25,7 +25,7 @@ const CreateBoardModal = () => {
 
     const handleCreate = async () => {
         setLoading(true)
-        const { success, message } = await createBoard({ title, organizationId: `${params.orgId}` })
+        const { success, message } = await createBoard({ title, organizationId: `${params?.orgId}` })
         if (success) {
             setError("")
             setLoading(false)

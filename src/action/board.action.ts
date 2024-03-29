@@ -57,14 +57,16 @@ export const createBoard = async ({ ...data }: createBoardRequest) => {
 
 export const updateBoard = async ({ ...data }: updateBoardRequest) => {
     try {
-        const { id, title } = updateBoardValidator.parse(data)
+        const { id, title, imgurl } = updateBoardValidator.parse(data)
         const existBoard = await db.board.findUnique({
             where: { id }
         })
         if (!existBoard) return { success: false, message: "something went wrong please try again" }
         const board = await db.board.update({
-            where: { id }, data: { title }
+            where: { id }, data: { title, imageFullUrl: imgurl ? imgurl : existBoard.imageFullUrl }
         })
+
+
         await createActivity({
             entityId: board.id,
             entityTitle: board.title,
@@ -83,7 +85,7 @@ export const updateBoard = async ({ ...data }: updateBoardRequest) => {
 
 export const trashBoard = async ({ ...data }: removeBoardRequest) => {
     try {
-        const { boardId, memberId ,orgId} = removeBoardValidator.parse(data)
+        const { boardId, memberId, orgId } = removeBoardValidator.parse(data)
         const board = await db.board.findUnique({
             where: { id: boardId }
         })
@@ -123,7 +125,7 @@ export const trashBoard = async ({ ...data }: removeBoardRequest) => {
 
 export const restoreBoard = async ({ ...data }: removeBoardRequest) => {
     try {
-        const { boardId, memberId ,orgId} = removeBoardValidator.parse(data)
+        const { boardId, memberId, orgId } = removeBoardValidator.parse(data)
         const board = await db.board.findUnique({
             where: { id: boardId }
         })
@@ -161,9 +163,9 @@ export const restoreBoard = async ({ ...data }: removeBoardRequest) => {
     }
 }
 
-export const deleteBoard=async({ ...data }: removeBoardRequest)=>{
+export const deleteBoard = async ({ ...data }: removeBoardRequest) => {
     try {
-        const { boardId, memberId ,orgId} = removeBoardValidator.parse(data)
+        const { boardId, memberId, orgId } = removeBoardValidator.parse(data)
         const board = await db.board.findUnique({
             where: { id: boardId }
         })

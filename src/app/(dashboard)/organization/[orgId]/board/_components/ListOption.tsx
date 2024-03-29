@@ -1,33 +1,27 @@
-import { copyList, deleteList, trashList } from '@/action/list.action'
-import { useAction } from '@/components/hooks/useAction'
+import { useOldAction } from '@/components/hooks/useOldAction'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import axios from 'axios'
 import { MoreHorizontal, X } from 'lucide-react'
-import { useParams, usePathname, useRouter } from 'next/navigation'
-import React, { useRef, useState } from 'react'
-import { twMerge } from 'tailwind-merge'
-import { useOnClickOutside } from 'usehooks-ts'
+import { useParams } from 'next/navigation'
+import React from 'react'
+
 
 const ListOption = ({ listId }: { listId: string }) => {
-    const router = useRouter()
-    const params: { boardId: string, orgId: string } = useParams()
-    const pathname = usePathname()
-    const { execute: handleCopy, success: successCopy, error: errorCopy, loading: loadingCopy } = useAction({
+    const params: { boardId: string, orgId: string }|null = useParams()
+    // const { execute: handleCopy, success: successCopy, error: errorCopy, loading: loadingCopy } = useAction({
+    //     FN: async () => {
+    //         return copyList({ listId, boardId: params.boardId, orgId: params.orgId, path: pathname })
+    //     },
+    //     onSuccess: () => {
+    //         router.refresh()
+    //     }
+    // })
+    const { execute: handleTrash, success: successTrash, error: errorTrash, loading: loadingTrash } = useOldAction({
         FN: async () => {
-            return copyList({ listId, boardId: params.boardId, orgId: params.orgId, path: pathname })
-        },
-        onSuccess: () => {
-            router.refresh()
+            return axios.delete(`/api/socket/list/${listId}?orgId=${params?.orgId}&boardId=${params?.boardId}`)
         }
     })
-    const { execute: handleTrash, success: successTrash, error: errorTrash, loading: loadingTrash } = useAction({
-        FN: async () => {
-            return trashList({ listId ,orgId:params.orgId})
-        },
-        onSuccess: () => {
-            router.refresh()
-        }
-    }) 
 
     return (
         <Popover>
@@ -43,7 +37,7 @@ const ListOption = ({ listId }: { listId: string }) => {
                 <PopoverClose className=' absolute right-2 top-2'>
                     <Button variant={"ghost"} className='absolute right-0 p-1 h-fit'><X className=' h-5' /> </Button>
                 </PopoverClose>
-                <Button onClick={() => handleCopy()} isLoading={loadingCopy} variant={"secondary"} className=' w-full h-fit p-2'>copy this list...</Button>
+                {/* <Button onClick={() => handleCopy()} isLoading={loadingCopy} variant={"secondary"} className=' w-full h-fit p-2'>copy this list...</Button> */}
                 <Button onClick={() => handleTrash()} isLoading={loadingTrash} variant={"secondary"} className=' w-full h-fit p-2 text-red-500'>move to trash this list...</Button>
             </PopoverContent>
         </Popover>
