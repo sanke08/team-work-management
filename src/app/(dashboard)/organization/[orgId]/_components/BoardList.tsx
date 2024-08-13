@@ -1,6 +1,5 @@
 import { Board } from '@prisma/client'
 import React from 'react'
-import img from "../../../../../../public/3.jpg"
 import Image from 'next/image'
 import Link from 'next/link'
 
